@@ -4,11 +4,11 @@ stages:
     deps:
     - R/download.R
     outs:
-    - cache/
+    - download/
   make_parquet:
     cmd: Rscript R/build.R
     deps:
     - R/build.R
-    - cache/
+    - download/
     outs:
-    - data/
+    - brick/

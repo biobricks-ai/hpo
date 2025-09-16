@@ -31,14 +31,14 @@ get_page_source_firefox <- function(URL) {
 }
 
 options(timeout=1800) # download timeout
-obo_address = "https://hpo.jax.org/app/download/ontology" # URL for ontology part of app
-ann_address = "https://hpo.jax.org/app/download/annotation" # URL for annotation part of app
+obo_address = "https://ontology.jax.org/api/hp" # URL for ontology part of app
+ann_address = "https://ontology.jax.org/api/network/annotation" # URL for annotation part of app
 
-fs::dir_create("cache") # Create directory for downloads/intermediate files
+fs::dir_create("download") # Create directory for downloads/intermediate files
 URL_obo = get_page_source_firefox(obo_address) |> parse_for_files(ext1="http:.*[.]obo", 
 	ext2="http:.*[.]obo$") # get URLs for ontology
 URL_ann = get_page_source_firefox(ann_address) |> parse_for_files(ext1="http:.*[.]txt|http:.*[.]hpoa", 
 	ext2="http:.*[.]txt$|http:.*[.]hpoa$") # get URLs for annotation
 URLs = c(URL_obo, URL_ann)
 files = strsplit_grepl(URLs, "/", "[.](hpoa$|txt$|obo$)") 
-walk2(URLs, paste0("cache/", files), download.file) # Download files 
+walk2(URLs, paste0("download/", files), download.file) # Download files 

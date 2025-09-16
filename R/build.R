@@ -4,7 +4,7 @@ library(arrow)
 library(stringr)
 library(ontologyIndex)
 
-outdir <- fs::dir_create("data")
+outdir <- fs::dir_create("brick")
 
 delete_useless_columns <- function(df) {
   df[, sapply(df, function(col) length(unique(col))) > 1]
@@ -36,4 +36,4 @@ save_parquet <- function(file) {
 
 # WRITE OUTS ================================================================================
 fs::dir_ls(outdir) |> fs::file_delete() # delete files present in the directory
-fs::dir_ls("cache", regexp=".obo|.hpoa|.txt") |> walk(save_parquet) # Create parquet files
+fs::dir_ls("download", regexp=".obo|.hpoa|.txt") |> walk(save_parquet) # Create parquet files
