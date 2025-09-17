@@ -1,14 +1,14 @@
 stages:
   download_data:
-    cmd: Rscript R/download.R
+    cmd: ./stages/01_download.sh
     deps:
-    - R/download.R
+    - stages/01_download.sh
     outs:
     - download/
   make_parquet:
-    cmd: Rscript R/build.R
+    cmd: Rscript stages/02_build.R
     deps:
-    - R/build.R
+    - stages/02_build.R
     - download/
     outs:
     - brick/

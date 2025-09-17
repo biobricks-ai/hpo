@@ -1,28 +1,34 @@
 schema: '2.0'
 stages:
   download_data:
-    cmd: Rscript R/download.R
+    cmd: ./stages/01_download.sh
     deps:
-    - path: R/download.R
-      md5: d18b40ae53e7aba5ffd0226606ed6b2c
-      size: 1847
+    - path: stages/01_download.sh
+      hash: md5
+      md5: 2ecbcff95bcca9ee961fec346881379a
+      size: 606
+      isexec: true
     outs:
-    - path: cache/
-      md5: f4f76cb65ecf75946a32b731a11cf8ad.dir
-      size: 134768091
+    - path: download/
+      hash: md5
+      md5: f03fd68823c2ffcfba292b2f6f944fc4.dir
+      size: 142861052
       nfiles: 4
   make_parquet:
-    cmd: Rscript R/build.R
+    cmd: Rscript stages/02_build.R
     deps:
-    - path: R/build.R
-      md5: dab4c431b20e2a48f72336151629c191
-      size: 1639
-    - path: cache/
-      md5: f4f76cb65ecf75946a32b731a11cf8ad.dir
-      size: 134768091
+    - path: download/
+      hash: md5
+      md5: f03fd68823c2ffcfba292b2f6f944fc4.dir
+      size: 142861052
       nfiles: 4
+    - path: stages/02_build.R
+      hash: md5
+      md5: a8c85ed7c7a01dbb3fcbdf1418eca130
+      size: 1627
     outs:
-    - path: data/
-      md5: fdd7f83edfb5a7a689afd98dafa1091f.dir
-      size: 12385748
+    - path: brick/
+      hash: md5
+      md5: 0254a3ce8dfe9ef60761e11ffb3a0189.dir
+      size: 14761735
       nfiles: 4
