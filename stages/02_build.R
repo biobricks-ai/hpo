@@ -13,7 +13,7 @@ delete_useless_columns <- function(df) {
 # Get headers from text files (header found on line 1)
 get_txt_headers <- function(file) {
 	vroom::vroom_lines(file, n_max=1) |> sub(pattern = "#Format: ", replacement = "") |>
-	strsplit(split="<tab>") |> unlist()
+	strsplit(split="\t") |> unlist()
 }
 
 # Get headers from hpoa file (script detects header from the lines at top of file as header contains DatabaseID
@@ -24,14 +24,15 @@ get_hpoa_headers <- function(file) {
 }
 
 save_parquet <- function(file) {
-  path <- fs::path_ext_remove(file) |> fs::path_ext_set("parquet") |> fs::path_file()
-  if(grepl(x=file, pattern=".txt"))
-  	df <- vroom::vroom(file,comment="#", delim="\t", col_names = get_txt_headers(file))
-  else if(grepl(x=file, pattern=".obo"))
-  	df <- get_ontology(file, propagate_relationships = "is_a", extract_tags = "everything") |> as.data.frame()
-  else if(grepl(x=file, pattern = ".hpoa"))
-  	df <- vroom::vroom(file,comment="#", delim="\t", col_names = get_hpoa_headers(file))
-  delete_useless_columns(df) |>  arrow::write_parquet(fs::path(outdir,path))
+	path <- fs::path_ext_remove(file) |> fs::path_ext_set("parquet") |> fs::path_file()
+	print(get_txt_headers(file))
+	if(grepl(x=file, pattern=".txt"))
+		df <- vroom::vroom(file,comment="#", delim="\t", col_names = TRUE)
+	else if(grepl(x=file, pattern=".obo"))
+		df <- get_ontology(file, propagate_relationships = "is_a", extract_tags = "everything") |> as.data.frame()
+	else if(grepl(x=file, pattern = ".hpoa"))
+		df <- vroom::vroom(file,comment="#", delim="\t", col_names = TRUE)
+	delete_useless_columns(df) |>  arrow::write_parquet(fs::path(outdir,path))
 }
 
 # WRITE OUTS ================================================================================
